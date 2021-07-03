@@ -1,31 +1,29 @@
 <template>
   <div id="app">
-    <div id="tab-bar">
-      <div class="tab-bar-item">
-        <div>首页</div>
-      </div>
-      <div class="tab-bar-item">
-        <div>分类</div>
-      </div>
-      <div class="tab-bar-item">
-        <div>购物车</div>
-      </div>
-      <div class="tab-bar-item">
-        <div>我的</div>
-      </div>
-    </div>
+    <tab-bar>
+      <tab-bar-item>
+        <img slot="item-icon" src="./assets/img/tabbar/home_svg" alt="">
+      </tab-bar-item>
+      <tab-bar-item></tab-bar-item>
+      <tab-bar-item></tab-bar-item>
+      <tab-bar-item></tab-bar-item>
+    </tab-bar>
   </div>
 </template>
 
 <script>
+import TabBar from './components/common/tabbar/TabBar.vue'
+import TabBarItem from './components/common/tabbar/TabBarItem.vue'
 
 
 export default {
   name: 'App',
   components: {
-    
+    TabBar,
+    TabBarItem,
   }
 }
+    TabBar
 </script>
 
 <style>
