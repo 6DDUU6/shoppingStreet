@@ -1,29 +1,21 @@
 <template>
   <div id="app">
-    <tab-bar>
-      <tab-bar-item>
-        <img slot="item-icon" src="./assets/img/tabbar/home_svg" alt="">
-      </tab-bar-item>
-      <tab-bar-item></tab-bar-item>
-      <tab-bar-item></tab-bar-item>
-      <tab-bar-item></tab-bar-item>
-    </tab-bar>
+    <router-view></router-view>
+    <main-tab-bar></main-tab-bar>
   </div>
 </template>
 
 <script>
-import TabBar from './components/common/tabbar/TabBar.vue'
-import TabBarItem from './components/common/tabbar/TabBarItem.vue'
+import MainTabBar from 'components/content/maintabbar/MainTabBar.vue'
 
 
 export default {
   name: 'App',
   components: {
-    TabBar,
-    TabBarItem,
+    MainTabBar
   }
 }
-    TabBar
+    
 </script>
 
 <style>
