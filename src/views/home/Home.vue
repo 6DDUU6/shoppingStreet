@@ -3,14 +3,20 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
-        
-           <home-swiper :banners = 'banners'></home-swiper>  <!--传父组件的值出去-->
+        <scroll class="content" 
+                ref="scroll" 
+                :probe-type='3' 
+                @scroll="contentScroll" 
+                :pull-up-load='true' >
+            <home-swiper :banners = 'banners'></home-swiper>  <!--传父组件的值出去-->
             <recommend-view :recommends="recommends"></recommend-view>
             <feature-view/>
             <tab-control :titles="['流行', '新款', '精选']" 
             class="tab-control" 
             @tabClick='tabClick'></tab-control>
             <goods-list :goods="showGoods"></goods-list>
+        </scroll>
+        <back-top @click.native='backClick' v-show="isShowBack"></back-top>
         
     </div> 
     
@@ -24,9 +30,11 @@ import FeatureView from './childComps/FeatureView.vue'
 import NavBar from 'components/common/navbar/NavBar';
 import TabControl from 'components/content/tabcontrol/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
-
+import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/backTop/BackTop'
 
 import {getHomeMultidata, getHomeGoods} from 'network/home'
+import {debounce} from 'common/utils'
 
 export default {
    name:'Home',
@@ -37,6 +45,8 @@ export default {
         NavBar,
         TabControl,
         GoodsList,
+        Scroll,
+        BackTop,
    },
   
     data() {
@@ -48,7 +58,8 @@ export default {
                 'new': {page: 0, list: []},
                 'sell': {page: 0, list: []},
             },
-            currentType:'pop'
+            currentType:'pop',
+            isShowBack:false
         }
     },
     computed: {
@@ -63,11 +74,21 @@ export default {
     //    请求商品数据
         this.getHomeGoods('pop')
         this.getHomeGoods('new')
-        this.getHomeGoods('sell')     
+        this.getHomeGoods('sell')    
+        
    },
 
+   mounted() {
+       // 监听Item中图片加载完成
+
+       const refresh = debounce(this.$refs.scroll.refresh) 
+        this.$bus.$on('itemImageLoad', () => { 
+            refresh()
+        })
+   },
 
    methods: {
+      
     //    事件监听的相关方法
     tabClick(index) {
         switch(index) {
@@ -110,12 +131,14 @@ export default {
         },
 
         backClick() {
-            // this.$refs.scroll.scroll.scrollTo(0,0)
-            // console.log('回到顶部');
-            console.log(this.$refs.scroll.messages);
-            // this.$refs.scroll.scroll.scrollTo(0,0)
-            this.$refs.scroll.scrollTo(0,0)
-        }
+           this.$refs.scroll.scrollTo(0, 0)
+        },
+
+        contentScroll(position) {
+            // console.log(position);
+            this.isShowBack = -(position.y) > 1000
+        },
+
    }
 
 
@@ -126,6 +149,8 @@ export default {
 /* scope作用域   */
     #home {
         padding-top: 44px;
+        height: 100vh;
+        position: relative;
     }
 
     .home-nav {
@@ -145,5 +170,20 @@ export default {
         z-index: 9;
     }
 
+    /* .content {
+        height: calc(100% - 93px);
+        overflow: hidden;
+        margin-top: 44px;
+    } */
+
+    .content {
+        overflow: hidden;
+        position: absolute;
+        top: 44px;
+        bottom: 49px;
+        left: 0;
+        right: 0;
+        /* background-color: white; */
+    }
     
 </style>
