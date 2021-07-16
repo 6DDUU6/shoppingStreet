@@ -1,7 +1,7 @@
 <template>
         <div class="goods-item">
             <img :src="goodsItem.show.img" alt="" 
-                @load="imageLoad" @click="itemClick">
+                @load="imageLoad" @click="backClick">
             <div class="goods-info">
                 <p>{{goodsItem.title}}</p>
                 <span class="price">{{goodsItem.price}}</span>
@@ -25,9 +25,9 @@ export default {
        imageLoad() {
            this.$bus.$emit('itemImageLoad')
        },
-       itemClick() {
-           console.log('跳转详情页');
-       }
+        backClick() {
+            this.$router.push('/detail/' + this.goodsItem.iid)
+        }
    }
 };
 </script>
