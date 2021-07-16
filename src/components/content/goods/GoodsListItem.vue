@@ -1,6 +1,7 @@
 <template>
         <div class="goods-item">
-            <img :src="goodsItem.show.img" alt="" @load="imageLoad">
+            <img :src="goodsItem.show.img" alt="" 
+                @load="imageLoad" @click="itemClick">
             <div class="goods-info">
                 <p>{{goodsItem.title}}</p>
                 <span class="price">{{goodsItem.price}}</span>
@@ -23,6 +24,9 @@ export default {
    methods:{
        imageLoad() {
            this.$bus.$emit('itemImageLoad')
+       },
+       itemClick() {
+           console.log('跳转详情页');
        }
    }
 };
